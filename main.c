@@ -4,28 +4,79 @@
 #include "UART.h"
 #include <util/delay.h>
 
+#define CHECK_SEND   1
+#define CHECK_REC    0
+
+
+#if CHECK_SEND
+
+
+int main (void)
+{
+	init_UART();
+	while(1)
+	{
+		UART_SEND_string("Hello from \r\n");
+		UART_SEND_string("Embedded fab\r\n");
+		UART_SEND_string("\r\n");
+
+		_delay_ms(1000);
+	}
+	return 0;
+}
+
+
+#endif
+
+
+#if CHECK_REC
 
 int main (void)
 {
 
-DDRD=0xff;
+	char x;
+	DDRD=0xff;
 
-init_UART();
+	init_UART();
+	UART_SEND_string("start Prog\r\n");
 
-   while(1)
-   {
+	while(1)
+	{
 
-	   UART_SEND_string("ahmed saleh nmr \r\n");
-	   UART_SEND_string("Embeddedfab\r\n");
-	   UART_SEND_string("Allah akber \r\n");
+		x=UART_getChar();
+		if(x=='7')
+		{
+			PORTD=0x00;
+			PORTD|=(1<<PD7);
+			UART_SEND_string("Done turning on SW 7\r\n");
+		}
+		else if(x=='6')
+		{
+			PORTD=0x00;
+			PORTD|=(1<<PD6);
+			UART_SEND_string("Done turning on SW 6\r\n");
+		}
+		else if(x=='5')
+		{
+			PORTD=0x00;
+			PORTD|=(1<<PD5);
+			UART_SEND_string("Done turning on SW 5\r\n");
+		}
+		else if(x=='4')
+		{
+			PORTD=0x00;
+			PORTD|=(1<<PD4);
+			UART_SEND_string("Done turning on SW 4\r\n");
+		}
 
-	   UART_SEND_string("\r\n");
-	   PORTD=0xff;
-	_delay_ms(1000);
 
-   }
-   return 0;
+
+		_delay_ms(1000);
+
+	}
+	return 0;
 }
 
+#endif
 
 
